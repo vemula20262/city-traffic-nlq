@@ -8,7 +8,7 @@ import os
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 import numpy as np
-from fastembed import TextEmbedding
+from sentence_transformers import SentenceTransformer
 
 app = Flask(__name__)
 
@@ -39,26 +39,14 @@ def init_embedding_model():
     """Initialize embedding model for vector search"""
     global embedding_model
     if embedding_model is None:
-        print("Loading FastEmbed model...")
-        # FastEmbed supports these model names:
-        # - "BAAI/bge-small-en-v1.5" (384 dims)
-        # - "sentence-transformers/all-MiniLM-L6-v2" (384 dims)
-        # - "sentence-transformers/all-mpnet-base-v2" (768 dims)
-        # Try the BAAI model first, fallback to all-MiniLM if it fails
+        print("Loading SentenceTransformer model...")
         try:
-            # FastEmbed may need the model in a specific format
-            embedding_model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
+            embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+            print("✅ Embedding model loaded!")
         except Exception as e:
-            print(f"⚠️  Error loading BAAI/bge-small-en-v1.5: {e}")
-            print("Trying alternative model: sentence-transformers/all-MiniLM-L6-v2")
-            try:
-                embedding_model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
-            except Exception as e2:
-                print(f"❌ Error loading alternative model: {e2}")
-                print("⚠️  Vector search will not work without embedding model")
-                # Return None instead of raising - allow app to run without vector search
-                return None
-        print("✅ Embedding model loaded!")
+            print(f"❌ Error loading embedding model: {e}")
+            print("⚠️  Vector search will not work without embedding model")
+            return None
     return embedding_model
 
 
@@ -675,7 +663,7 @@ class TrafficDataStore:
             }
         
         # Generate query embedding
-        query_embedding = list(model.embed([query_text]))[0]
+        query_embedding = model.encode(query_text)
         query_vector = np.array(query_embedding)
         query_dim = len(query_vector)
         
