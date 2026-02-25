@@ -2,6 +2,7 @@ services:
   - type: web
     name: city-traffic-nlq-api
     env: python
+    pythonVersion: 3.10.0
     rootDir: showcase/backend
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
