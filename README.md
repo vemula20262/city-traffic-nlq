@@ -47,6 +47,9 @@ The pipeline uses environment variables:
 - `EMBEDDING_BATCH_SIZE`
 - `EMBEDDING_CHECKPOINT`
 
+Detailed local setup and command-by-command verification guide:
+- `docs/LOCAL_SETUP_AND_VERIFICATION.md`
+
 ## Running the pipeline
 
 ### Option A: Modern unified CLI
