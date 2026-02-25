@@ -6,11 +6,13 @@ from typing import Callable, Dict, Iterable, List, Optional
 import os
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from pymongo import MongoClient
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 app = Flask(__name__)
+CORS(app)
 
 # Global MongoDB connection
 mongo_client = None
