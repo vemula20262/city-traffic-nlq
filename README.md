@@ -51,6 +51,9 @@ Detailed local setup and command-by-command verification guide:
 - `docs/LOCAL_SETUP_AND_VERIFICATION.md`
 - Includes a dated execution log with live outputs from a full sample end-to-end run.
 
+Submission artifact audit and dashboard verification report:
+- `docs/SUBMISSION_AUDIT_2026-02-24.md`
+
 ## Running the pipeline
 
 ### Option A: Modern unified CLI
