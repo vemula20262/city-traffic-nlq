@@ -111,3 +111,55 @@ Set `.env` from `.env.example`, then run:
 - `Missing required file`:
   - CSV path not valid.
   - Fix: update `CSV_FILE` in `.env`.
+
+## 7) Actual execution log (2026-02-24)
+
+This section records what was executed in this repo during live validation.
+
+### Context
+- Full NYC CSV was not found locally, so a controlled sample file was created:
+  - `docs/examples/sample_crashes.csv` (3 rows)
+- Mongo was run in Docker using replica set mode (`rs0`) to match project defaults.
+
+### Commands executed
+
+```bash
+# Start Mongo replica set in Docker
+open -a Docker
+docker rm -f city-traffic-mongo >/dev/null 2>&1 || true
+docker run -d --name city-traffic-mongo -p 27017:27017 mongo:7 --replSet rs0 --bind_ip_all
+docker exec city-traffic-mongo mongosh --quiet --eval "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0', members:[{_id:0, host:'localhost:27017'}]}); 1 }"
+
+# Reset collection for clean test run
+docker exec city-traffic-mongo mongosh --quiet --eval "db.getSiblingDB('traffic').traffic.drop(); print('dropped')"
+
+# Pipeline run
+CSV_FILE="/Users/thusharreddy/city-traffic-nlq/docs/examples/sample_crashes.csv" .venv/bin/python -m city_traffic_nlq.cli import --no-confirm
+.venv/bin/python -m city_traffic_nlq.cli geohash
+.venv/bin/python -m city_traffic_nlq.cli cleanup
+.venv/bin/python -m city_traffic_nlq.cli indexes
+.venv/bin/python -m city_traffic_nlq.cli status
+.venv/bin/python -m city_traffic_nlq.cli test-queries
+EMBEDDING_CHECKPOINT="/Users/thusharreddy/city-traffic-nlq/logs/sample_embedding_checkpoint.json" .venv/bin/python -m city_traffic_nlq.cli embeddings --limit 3
+.venv/bin/python -m city_traffic_nlq.cli status
+```
+
+### Observed results
+- Import: `3` docs inserted.
+- Geohash: `3` docs updated.
+- Cleanup: `3` valid GeoJSON locations.
+- Indexes: all expected indexes created (`_id_`, shard/date, date, collision unique, borough, 2dsphere).
+- Query tests:
+  - Times Square near query returned `1` result.
+  - Manhattan count returned `1`.
+  - 2024 regex date count returned `3`.
+- Embeddings: `3/3` docs embedded (100%).
+- Final status:
+  - `Total docs: 3`
+  - `With geohash: 3`
+  - `With GeoJSON: 3`
+  - `With embeddings: 3`
+
+### Notes
+- This confirms the full pipeline is operational end-to-end in local environment.
+- For production-scale validation, replace sample file with full NYC CSV and rerun same command sequence.

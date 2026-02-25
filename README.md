@@ -49,6 +49,7 @@ The pipeline uses environment variables:
 
 Detailed local setup and command-by-command verification guide:
 - `docs/LOCAL_SETUP_AND_VERIFICATION.md`
+- Includes a dated execution log with live outputs from a full sample end-to-end run.
 
 ## Running the pipeline
 
