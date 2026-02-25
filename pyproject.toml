@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "city-traffic-nlq"
+version = "0.1.0"
+description = "NYC traffic crash data pipeline for geospatial + semantic query workflows"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pymongo>=4.6.0",
+  "tqdm>=4.66.0",
+  "pygeohash>=1.2.0",
+  "fastembed>=0.3.6"
+]
+
+[project.scripts]
+traffic-pipeline = "city_traffic_nlq.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
