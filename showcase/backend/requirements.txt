@@ -2,4 +2,4 @@ Flask==3.0.3
 pymongo==4.7.1
 numpy==1.26.4
 gunicorn==23.0.0
-fastembed==0.3.6
+fastembed==0.7.4
