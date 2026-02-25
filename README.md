@@ -80,6 +80,16 @@ python scripts/06_check_status.py
 python scripts/07_test_queries.py
 ```
 
+## Customer demo app (no-AWS fallback)
+
+- A working customer-facing dashboard path is included in `showcase/`.
+- Includes:
+	- React frontend (`showcase/frontend`)
+	- Flask backend (`showcase/backend`)
+	- Local 3-node Mongo replica set setup (`showcase/infra/replicaset`)
+	- Free-hosting deployment steps (Render + Vercel + Atlas)
+- See: `showcase/README.md`
+
 ## Interview talking points
 
 - **Data engineering:** batching, cleanup, deduplication, and checkpointed jobs.

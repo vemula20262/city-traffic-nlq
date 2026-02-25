@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: city-traffic-nlq-api
+    env: python
+    rootDir: showcase/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    plan: free
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: traffic
+      - key: MONGO_COLLECTION
+        value: traffic

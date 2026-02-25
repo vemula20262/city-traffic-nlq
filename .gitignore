@@ -20,3 +20,7 @@ data/
 # OS/editor
 .DS_Store
 .vscode/
+
+# Frontend artifacts
+node_modules/
+showcase/frontend/dist/
