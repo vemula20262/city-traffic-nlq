@@ -10,6 +10,6 @@ services:
       - key: MONGO_URI
         sync: false
       - key: MONGO_DB
-        value: traffic
+        value: city_traffic_nlq
       - key: MONGO_COLLECTION
-        value: traffic
+        value: crashes
