@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import sys
+
+from pymongo.errors import PyMongoError
 
 from .data_cleanup import fix_all_data
 from .embeddings import generate_embeddings
@@ -30,20 +33,28 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    if args.command == "import":
-        import_csv(confirm_overwrite=not args.no_confirm)
-    elif args.command == "geohash":
-        add_geohash()
-    elif args.command == "cleanup":
-        fix_all_data()
-    elif args.command == "indexes":
-        create_indexes()
-    elif args.command == "embeddings":
-        generate_embeddings(limit=args.limit)
-    elif args.command == "status":
-        check_status()
-    elif args.command == "test-queries":
-        test_queries()
+    try:
+        if args.command == "import":
+            import_csv(confirm_overwrite=not args.no_confirm)
+        elif args.command == "geohash":
+            add_geohash()
+        elif args.command == "cleanup":
+            fix_all_data()
+        elif args.command == "indexes":
+            create_indexes()
+        elif args.command == "embeddings":
+            generate_embeddings(limit=args.limit)
+        elif args.command == "status":
+            check_status()
+        elif args.command == "test-queries":
+            test_queries()
+    except FileNotFoundError as error:
+        print(f"❌ Missing required file: {error}")
+        sys.exit(1)
+    except PyMongoError as error:
+        print(f"❌ MongoDB error: {error}")
+        print("   Ensure MongoDB is running and MONGO_URI is correct.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
