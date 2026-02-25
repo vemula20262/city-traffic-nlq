@@ -83,3 +83,34 @@ python scripts/07_test_queries.py
 - **Search architecture:** geospatial indexing + semantic embeddings in one pipeline.
 - **Operational reliability:** resumable embedding generation and status observability.
 - **Refactoring:** migrated from ad-hoc scripts to a modular, maintainable package.
+
+## Interview demo script (2 minutes)
+
+1. **Problem statement (20s):**
+	- "I built a pipeline that turns raw NYC crash data into a query-ready geospatial + semantic search dataset in MongoDB."
+
+2. **Architecture snapshot (25s):**
+	- `import` ingests CSV and normalizes types.
+	- `geohash` + `cleanup` prepare spatial fields (`geohash`, GeoJSON `LOCATION`).
+	- `indexes` creates high-impact query indexes.
+	- `embeddings` generates vector fields for NLQ retrieval.
+
+3. **Live command flow (45s):**
+	```bash
+	python -m city_traffic_nlq.cli status
+	python -m city_traffic_nlq.cli test-queries
+	```
+	- Explain output: total coverage, index health, and query latency checks.
+
+4. **Engineering quality improvements (20s):**
+	- Moved from ad-hoc scripts to package-based modules.
+	- Added a unified CLI, environment-driven config, and checkpointed embedding jobs.
+	- Added reproducible runbook and dated validation logs.
+
+5. **Production-readiness note (10s):**
+	- "This repo currently contains the validated data/backend pipeline. UI integration can be layered on top using an API/dashboard service."
+
+## Scope note
+
+- This repository currently does **not** include a customer-facing website/UI (no frontend framework or web server app present).
+- Verified scope is the backend data pipeline and query-validation scripts.
